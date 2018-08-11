@@ -15,6 +15,7 @@ limitations under the License.
 
 package com.justinwei.solfegist;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,6 +28,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -43,6 +45,8 @@ import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.ImageReader;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -95,6 +99,8 @@ public class Camera2BasicFragment extends Fragment
   /** Max preview height that is guaranteed by Camera2 API */
   private static final int MAX_PREVIEW_HEIGHT = 1080;
 
+  private MediaPlayer doSound, reSound, miSound, faSound, solSound, laSound, tiSound;
+  private static boolean soundEnabled = false;
   /**
    * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
    * TextureView}.
@@ -287,6 +293,47 @@ public class Camera2BasicFragment extends Fragment
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    doSound = MediaPlayer.create(getActivity(), R.raw.donote);
+    reSound = MediaPlayer.create(getActivity(), R.raw.renote);
+    miSound = MediaPlayer.create(getActivity(), R.raw.minote);
+    faSound = MediaPlayer.create(getActivity(), R.raw.fanote);
+    solSound = MediaPlayer.create(getActivity(), R.raw.solnote);
+    laSound = MediaPlayer.create(getActivity(), R.raw.lanote);
+    tiSound = MediaPlayer.create(getActivity(), R.raw.tinote);
+
+    Handler handler=new Handler();
+    handler.post(new Runnable(){
+      @Override
+      public void run() {
+        // update sound here
+        if (soundEnabled)
+          switch ((String) toggleButton.getText()) {
+            case "do":
+              doSound.start();
+              break;
+            case "re":
+              reSound.start();
+              break;
+            case "mi":
+              miSound.start();
+              break;
+            case "fa":
+              faSound.start();
+              break;
+            case "sol":
+              solSound.start();
+              break;
+            case "la":
+              laSound.start();
+              break;
+            case "ti":
+              tiSound.start();
+              break;
+          }
+        handler.postDelayed(this,2000); // set time here to refresh textView
+      }
+    });
+
   }
 
 
@@ -306,10 +353,13 @@ public class Camera2BasicFragment extends Fragment
     toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
+          soundEnabled = true;
           // The toggle is enabled
           toggleButton.setTextColor(Color.parseColor("#bb4d00"));
           toggleButton.setBackgroundColor(Color.parseColor("#f7e6ca"));
+          doSound.start();
         } else {
+          soundEnabled = false;
           // The toggle is disabled
           toggleButton.setTextColor(Color.parseColor("#cbae82"));
           toggleButton.setBackgroundColor(Color.parseColor("#fff3e0"));
@@ -487,6 +537,7 @@ public class Camera2BasicFragment extends Fragment
   }
 
   /** Opens the camera specified by {@link Camera2BasicFragment#cameraId}. */
+  @SuppressLint("MissingPermission")
   private void openCamera(int width, int height) {
     if (!checkedPermissions && !allPermissionsGranted()) {
       FragmentCompat.requestPermissions(this, getRequiredPermissions(), PERMISSIONS_REQUEST_CODE);
