@@ -11,6 +11,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if (findViewById(R.id.container) != null)
             if (null == savedInstanceState)
                 loadFragment(Camera2BasicFragment.newInstance());
+
 
         //Update action bar font
         SpannableString s = new SpannableString("SOLFEGIST");

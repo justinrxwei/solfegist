@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.justinwei.solfegist">
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -18,6 +19,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.justinwei.solfegist.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

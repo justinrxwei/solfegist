@@ -24,8 +24,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -45,6 +47,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -54,8 +57,9 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,7 +86,7 @@ public class Camera2BasicFragment extends Fragment
   private final Object lock = new Object();
   private boolean runClassifier = false;
   private boolean checkedPermissions = false;
-  private TextView textView;
+  private ToggleButton toggleButton;
   private ImageClassifier classifier;
 
   /** Max preview width that is guaranteed by Camera2 API */
@@ -210,7 +214,7 @@ public class Camera2BasicFragment extends Fragment
           new Runnable() {
             @Override
             public void run() {
-              textView.setText(text);
+              toggleButton.setText(text);
             }
           });
     }
@@ -278,6 +282,14 @@ public class Camera2BasicFragment extends Fragment
     return new Camera2BasicFragment();
   }
 
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+  }
+
+
   /** Layout the preview and buttons. */
   @Override
   public View onCreateView(
@@ -289,7 +301,21 @@ public class Camera2BasicFragment extends Fragment
   @Override
   public void onViewCreated(final View view, Bundle savedInstanceState) {
     textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-    textView = (TextView) view.findViewById(R.id.text);
+    toggleButton = (ToggleButton) view.findViewById(R.id.text);
+
+    toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+          // The toggle is enabled
+          toggleButton.setTextColor(Color.parseColor("#bb4d00"));
+          toggleButton.setBackgroundColor(Color.parseColor("#f7e6ca"));
+        } else {
+          // The toggle is disabled
+          toggleButton.setTextColor(Color.parseColor("#cbae82"));
+          toggleButton.setBackgroundColor(Color.parseColor("#fff3e0"));
+        }
+      }
+    });
   }
 
   /** Load the model and labels. */
@@ -500,6 +526,7 @@ public class Camera2BasicFragment extends Fragment
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
   }
 
+
   /** Closes the current {@link CameraDevice}. */
   private void closeCamera() {
     try {
@@ -656,7 +683,7 @@ public class Camera2BasicFragment extends Fragment
   /** Classifies a frame from the preview stream. */
   private void classifyFrame() {
     if (classifier == null || getActivity() == null || cameraDevice == null) {
-      showToast("Uninitialized Classifier or invalid context.");
+      //showToast("Uninitialized Classifier or invalid context.");
       return;
     }
     Bitmap bitmap =
