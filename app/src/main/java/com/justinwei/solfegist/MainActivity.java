@@ -1,9 +1,10 @@
 package com.justinwei.solfegist;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
+
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
@@ -23,7 +24,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         navigation.setOnNavigationItemSelectedListener(this);
 
         //display HomeFragment on startup
-        loadFragment(new HomeFragment());
+        if (findViewById(R.id.container) != null)
+            if (null == savedInstanceState)
+                loadFragment(Camera2BasicFragment.newInstance());
 
         //Update action bar font
         SpannableString s = new SpannableString("SOLFEGIST");
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null) {
-            getSupportFragmentManager()
+            getFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .commit();
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
-                fragment = new HomeFragment();
+                fragment = Camera2BasicFragment.newInstance();
                 break;
 
             case R.id.navigation_learn:
