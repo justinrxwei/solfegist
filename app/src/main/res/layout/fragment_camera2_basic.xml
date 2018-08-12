@@ -40,7 +40,7 @@
             android:textSize="50sp"
             android:textOn="@null"
             android:textOff="@null"
-            android:background="@android:color/transparent"
+            android:background="@color/colorPrimary"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
     </FrameLayout>
 

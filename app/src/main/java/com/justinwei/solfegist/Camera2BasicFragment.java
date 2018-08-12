@@ -90,7 +90,7 @@ public class Camera2BasicFragment extends Fragment
   private final Object lock = new Object();
   private boolean runClassifier = false;
   private boolean checkedPermissions = false;
-  private ToggleButton toggleButton;
+  private static ToggleButton toggleButton;
   private ImageClassifier classifier;
 
   /** Max preview width that is guaranteed by Camera2 API */
@@ -99,8 +99,7 @@ public class Camera2BasicFragment extends Fragment
   /** Max preview height that is guaranteed by Camera2 API */
   private static final int MAX_PREVIEW_HEIGHT = 1080;
 
-  private MediaPlayer doSound, reSound, miSound, faSound, solSound, laSound, tiSound;
-  private static boolean soundEnabled = false;
+
   /**
    * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
    * TextureView}.
@@ -288,51 +287,9 @@ public class Camera2BasicFragment extends Fragment
     return new Camera2BasicFragment();
   }
 
-
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    doSound = MediaPlayer.create(getActivity(), R.raw.donote);
-    reSound = MediaPlayer.create(getActivity(), R.raw.renote);
-    miSound = MediaPlayer.create(getActivity(), R.raw.minote);
-    faSound = MediaPlayer.create(getActivity(), R.raw.fanote);
-    solSound = MediaPlayer.create(getActivity(), R.raw.solnote);
-    laSound = MediaPlayer.create(getActivity(), R.raw.lanote);
-    tiSound = MediaPlayer.create(getActivity(), R.raw.tinote);
-
-    Handler handler=new Handler();
-    handler.post(new Runnable(){
-      @Override
-      public void run() {
-        // update sound here
-        if (soundEnabled)
-          switch ((String) toggleButton.getText()) {
-            case "do":
-              doSound.start();
-              break;
-            case "re":
-              reSound.start();
-              break;
-            case "mi":
-              miSound.start();
-              break;
-            case "fa":
-              faSound.start();
-              break;
-            case "sol":
-              solSound.start();
-              break;
-            case "la":
-              laSound.start();
-              break;
-            case "ti":
-              tiSound.start();
-              break;
-          }
-        handler.postDelayed(this,2000); // set time here to refresh textView
-      }
-    });
 
   }
 
@@ -344,28 +301,31 @@ public class Camera2BasicFragment extends Fragment
     return inflater.inflate(R.layout.fragment_camera2_basic, container, false);
   }
 
+
   /** Connect the buttons to their event handler. */
   @Override
   public void onViewCreated(final View view, Bundle savedInstanceState) {
     textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     toggleButton = (ToggleButton) view.findViewById(R.id.text);
-
     toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-          soundEnabled = true;
+          MainActivity.soundEnabled = true;
           // The toggle is enabled
           toggleButton.setTextColor(Color.parseColor("#bb4d00"));
           toggleButton.setBackgroundColor(Color.parseColor("#f7e6ca"));
-          doSound.start();
         } else {
-          soundEnabled = false;
+          MainActivity.soundEnabled = false;
           // The toggle is disabled
           toggleButton.setTextColor(Color.parseColor("#cbae82"));
           toggleButton.setBackgroundColor(Color.parseColor("#fff3e0"));
         }
       }
     });
+  }
+
+  public static ToggleButton getToggleButton() {
+    return toggleButton;
   }
 
   /** Load the model and labels. */
@@ -401,6 +361,8 @@ public class Camera2BasicFragment extends Fragment
     closeCamera();
     stopBackgroundThread();
     super.onPause();
+    MainActivity.soundEnabled = false;
+    toggleButton.setChecked(false);
   }
 
   @Override

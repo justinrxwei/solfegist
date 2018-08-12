@@ -1,7 +1,9 @@
 package com.justinwei.solfegist;
 
 import android.app.Fragment;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 
@@ -15,6 +17,8 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
+    private MediaPlayer doSound, reSound, miSound, faSound, solSound, laSound, tiSound;
+    public static boolean soundEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,49 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(s);
+
+        doSound = MediaPlayer.create(this, R.raw.donote);
+        reSound = MediaPlayer.create(this, R.raw.renote);
+        miSound = MediaPlayer.create(this, R.raw.minote);
+        faSound = MediaPlayer.create(this, R.raw.fanote);
+        solSound = MediaPlayer.create(this, R.raw.solnote);
+        laSound = MediaPlayer.create(this, R.raw.lanote);
+        tiSound = MediaPlayer.create(this, R.raw.tinote);
+
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                // update sound here
+                if (soundEnabled)
+                    switch ((String) Camera2BasicFragment.getToggleButton().getText()) {
+                        case "do":
+                            doSound.start();
+                            break;
+                        case "re":
+                            reSound.start();
+                            break;
+                        case "mi":
+                            miSound.start();
+                            break;
+                        case "fa":
+                            faSound.start();
+                            break;
+                        case "sol":
+                            solSound.start();
+                            break;
+                        case "la":
+                            laSound.start();
+                            break;
+                        case "ti":
+                            tiSound.start();
+                            break;
+
+                    }
+                    handler.postDelayed(this, 2000); // set time here to refresh textView
+
+            }
+        });
     }
 
     private boolean loadFragment(Fragment fragment) {
