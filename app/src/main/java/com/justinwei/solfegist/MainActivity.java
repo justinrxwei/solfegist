@@ -11,14 +11,19 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
+    //solfege sound variables
     private MediaPlayer doSound, reSound, miSound, faSound, solSound, laSound, tiSound;
     public static boolean soundEnabled = false;
+
+    //variables to update actionBar
+    SpannableString sHome, sLearn, sProfile;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +39,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 loadFragment(Camera2BasicFragment.newInstance());
 
 
-        //Update action bar font
-        SpannableString s = new SpannableString("SOLFEGIST");
-        s.setSpan(new TypefaceSpan(this, "Market_Deco.ttf"), 0, s.length(),
+        //update action bar font
+        sHome = new SpannableString("SOLFEGIST");
+        sHome.setSpan(new TypefaceSpan(this, "Market_Deco.ttf"), 0, sHome.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(s);
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(sHome);
+        sLearn = new SpannableString("SOLFEGE HAND SIGNS");
+        sLearn.setSpan(new TypefaceSpan(this, "Market_Deco.ttf"), 0, sLearn.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sProfile = new SpannableString("MY PROFILE");
+        sProfile.setSpan(new TypefaceSpan(this, "Market_Deco.ttf"), 0, sProfile.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+
+        //handle sound
         doSound = MediaPlayer.create(this, R.raw.donote);
         reSound = MediaPlayer.create(this, R.raw.renote);
         miSound = MediaPlayer.create(this, R.raw.minote);
@@ -105,17 +118,37 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (item.getItemId()) {
             case R.id.navigation_home:
                 fragment = Camera2BasicFragment.newInstance();
+                actionBar.setTitle(sHome);
                 break;
 
             case R.id.navigation_learn:
                 fragment = new LearnFragment();
+                actionBar.setTitle(sLearn);
+
                 break;
 
             case R.id.navigation_practice:
-                fragment = new PracticeFragment();
+                fragment = new ProfileFragment();
+                actionBar.setTitle(sProfile);
                 break;
 
         }
         return loadFragment(fragment);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.appbar_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.infoButton)
+        {
+            //show info screen
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
