@@ -27,8 +27,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 app:title="Do"
-                app:icon="@drawable/ic_person_black_24dp"
-                app:inner_view="@layout/card_content_1"
+                app:icon="@drawable/ic_pan_tool_black_24dp"
+                app:inner_view="@layout/learn_content_1"
                 app:expandOnClick="true">
             </com.alespero.expandablecardview.ExpandableCardView>
 
@@ -40,11 +40,75 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
                 app:title="Re"
-                app:icon="@drawable/ic_person_black_24dp"
-                app:inner_view="@layout/card_content_2"
+                app:icon="@drawable/ic_pan_tool_black_24dp"
+                app:inner_view="@layout/learn_content_2"
                 app:expandOnClick="true">
             </com.alespero.expandablecardview.ExpandableCardView>
 
+            <com.alespero.expandablecardview.ExpandableCardView
+                android:id="@+id/miCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                app:title="Mi"
+                app:icon="@drawable/ic_pan_tool_black_24dp"
+                app:inner_view="@layout/learn_content_3"
+                app:expandOnClick="true">
+            </com.alespero.expandablecardview.ExpandableCardView>
+
+            <com.alespero.expandablecardview.ExpandableCardView
+                android:id="@+id/faCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                app:title="Fa"
+                app:icon="@drawable/ic_pan_tool_black_24dp"
+                app:inner_view="@layout/learn_content_4"
+                app:expandOnClick="true">
+            </com.alespero.expandablecardview.ExpandableCardView>
+
+            <com.alespero.expandablecardview.ExpandableCardView
+                android:id="@+id/solCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                app:title="Sol"
+                app:icon="@drawable/ic_pan_tool_black_24dp"
+                app:inner_view="@layout/learn_content_5"
+                app:expandOnClick="true">
+            </com.alespero.expandablecardview.ExpandableCardView>
+
+            <com.alespero.expandablecardview.ExpandableCardView
+                android:id="@+id/laCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                app:title="La"
+                app:icon="@drawable/ic_pan_tool_black_24dp"
+                app:inner_view="@layout/learn_content_6"
+                app:expandOnClick="true">
+            </com.alespero.expandablecardview.ExpandableCardView>
+
+            <com.alespero.expandablecardview.ExpandableCardView
+                android:id="@+id/tiCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                app:title="Ti"
+                app:icon="@drawable/ic_pan_tool_black_24dp"
+                app:inner_view="@layout/learn_content_7"
+                app:expandOnClick="true">
+            </com.alespero.expandablecardview.ExpandableCardView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

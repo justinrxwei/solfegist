@@ -310,12 +310,12 @@ public class Camera2BasicFragment extends Fragment
     toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-          MainActivity.soundEnabled = true;
+          MainActivity.setSoundEnabled(true);
           // The toggle is enabled
           toggleButton.setTextColor(Color.parseColor("#bb4d00"));
           toggleButton.setBackgroundColor(Color.parseColor("#f7e6ca"));
         } else {
-          MainActivity.soundEnabled = false;
+          MainActivity.setSoundEnabled(false);
           // The toggle is disabled
           toggleButton.setTextColor(Color.parseColor("#cbae82"));
           toggleButton.setBackgroundColor(Color.parseColor("#fff3e0"));
@@ -361,7 +361,7 @@ public class Camera2BasicFragment extends Fragment
     closeCamera();
     stopBackgroundThread();
     super.onPause();
-    MainActivity.soundEnabled = false;
+    MainActivity.setSoundEnabled(false);
     toggleButton.setChecked(false);
   }
 

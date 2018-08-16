@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -22,21 +24,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private Fragment learnFragment;
     private Fragment profileFragment;
 
-    public static boolean soundEnabled = false;
+    private static boolean soundEnabled = false;
 
     //variables to update actionBar
-    SpannableString sHome, sLearn, sProfile;
-    ActionBar actionBar;
+    private SpannableString sHome, sLearn, sProfile;
+    private ActionBar actionBar;
+
+    MediaPlayer doSound, reSound, miSound, faSound, solSound, laSound, tiSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
-        //display HomeFragment on startup
+        //initialize fragments and display cameraFragment on startup
         if (findViewById(R.id.container) != null)
             if (null == savedInstanceState) {
                 cameraFragment = Camera2BasicFragment.newInstance();
@@ -44,12 +48,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 profileFragment = new ProfileFragment();
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, cameraFragment)
+                        .add(R.id.fragment_container, learnFragment)
+                        .commit();
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.fragment_container, profileFragment)
+                        .commit();
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.fragment_container, cameraFragment)
                         .commit();
             }
 
         loadActionBarText();
         loadAudio();
+
     }
 
 
@@ -67,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_learn:
                 displayLearnFragment();
                 actionBar.setTitle(sLearn);
+
+                /*turn off button when cameraFragment is hidden
+                setSoundEnabled(false);
+                Camera2BasicFragment.getToggleButton().setChecked(false);*/
                 break;
 
             case R.id.navigation_practice:
@@ -94,16 +111,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return super.onOptionsItemSelected(item);
     }
 
+    //https://stackoverflow.com/a/31197906/8309611
     //TODO: clean these methods up :(
     private void displayCameraFragment() {
         if (cameraFragment.isAdded()) {
-            getFragmentManager().beginTransaction().show(cameraFragment).commit();
+            getFragmentManager().beginTransaction().show(cameraFragment).commit();;
         } else {
             getFragmentManager().beginTransaction().add(R.id.fragment_container, cameraFragment).commit();
         }
         if (learnFragment.isAdded()) getFragmentManager().beginTransaction().hide(learnFragment).commit();
         if (profileFragment.isAdded()) getFragmentManager().beginTransaction().hide(profileFragment).commit();
-        getFragmentManager().beginTransaction().commit();
+        //getFragmentManager().beginTransaction().commit();
     }
 
     private void displayLearnFragment() {
@@ -114,7 +132,45 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
         if (cameraFragment.isAdded()) getFragmentManager().beginTransaction().hide(cameraFragment).commit();
         if (profileFragment.isAdded()) getFragmentManager().beginTransaction().hide(profileFragment).commit();
-        getFragmentManager().beginTransaction().commit();
+
+        //listeners for card buttons
+        Button doButton = (Button) findViewById(R.id.doCardButton);
+        Button reButton = (Button) findViewById(R.id.reCardButton);
+        Button miButton = (Button) findViewById(R.id.miCardButton);
+        Button faButton = (Button) findViewById(R.id.faCardButton);
+        Button solButton = (Button) findViewById(R.id.solCardButton);
+        Button laButton = (Button) findViewById(R.id.laCardButton);
+        Button tiButton = (Button) findViewById(R.id.tiCardButton);
+
+        doButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { doSound.start(); }
+        });
+        reButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { reSound.start(); }
+        });
+        miButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { miSound.start(); }
+        });
+        faButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { faSound.start(); }
+        });
+        solButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { solSound.start(); }
+        });
+        laButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { laSound.start(); }
+        });
+        tiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { tiSound.start(); }
+        });
+
     }
 
     private void displayProfileFragment() {
@@ -125,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
         if (learnFragment.isAdded()) getFragmentManager().beginTransaction().hide(learnFragment).commit();
         if (cameraFragment.isAdded()) getFragmentManager().beginTransaction().hide(cameraFragment).commit();
-        getFragmentManager().beginTransaction().commit();
+
     }
 
     private void loadActionBarText() {
@@ -145,13 +201,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private void loadAudio() {
         //handle sound
-        MediaPlayer doSound = MediaPlayer.create(this, R.raw.donote);
-        MediaPlayer reSound = MediaPlayer.create(this, R.raw.renote);
-        MediaPlayer miSound = MediaPlayer.create(this, R.raw.minote);
-        MediaPlayer faSound = MediaPlayer.create(this, R.raw.fanote);
-        MediaPlayer solSound = MediaPlayer.create(this, R.raw.solnote);
-        MediaPlayer laSound = MediaPlayer.create(this, R.raw.lanote);
-        MediaPlayer tiSound = MediaPlayer.create(this, R.raw.tinote);
+        doSound = MediaPlayer.create(this, R.raw.donote);
+        reSound = MediaPlayer.create(this, R.raw.renote);
+        miSound = MediaPlayer.create(this, R.raw.minote);
+        faSound = MediaPlayer.create(this, R.raw.fanote);
+        solSound = MediaPlayer.create(this, R.raw.solnote);
+        laSound = MediaPlayer.create(this, R.raw.lanote);
+        tiSound = MediaPlayer.create(this, R.raw.tinote);
 
         Handler handler = new Handler();
         handler.post(new Runnable() {
@@ -184,8 +240,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
                     }
                 handler.postDelayed(this, 2000); // set time here to refresh textView
-
             }
         });
+
+
+
+    }
+
+    public static void setSoundEnabled(boolean soundEnabled) {
+        MainActivity.soundEnabled = soundEnabled;
     }
 }
