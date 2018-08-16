@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,10 +24,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 app:title="Do"
                 app:icon="@drawable/ic_person_black_24dp"
-                app:inner_view="@layout/card_content"
+                app:inner_view="@layout/card_content_1"
                 app:expandOnClick="true">
             </com.alespero.expandablecardview.ExpandableCardView>
 
@@ -41,7 +41,7 @@
                 android:layout_marginBottom="10dp"
                 app:title="Re"
                 app:icon="@drawable/ic_person_black_24dp"
-                app:inner_view="@layout/card_content"
+                app:inner_view="@layout/card_content_2"
                 app:expandOnClick="true">
             </com.alespero.expandablecardview.ExpandableCardView>
 
