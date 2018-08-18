@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Preferences">
+
+        <CheckBoxPreference
+            android:key="checkbox_preference"
+            android:title="Continuous Solfege Sign Detection"
+            android:summary="If note playing enabled, continue classifying hand signs when browsing other parts of the app"
+            android:defaultValue="false"/>
+
+
+        <com.pavelsikun.seekbarpreference.SeekBarPreference
+            android:key="seekBarDelay"
+            android:title="Note Frequency"
+            android:summary="Additional delay between note pitches"
+            android:enabled="true"
+            android:defaultValue="1"
+            app:msbp_view_defaultValue="1"
+            app:msbp_minValue="0"
+            app:msbp_maxValue="5"
+            app:msbp_interval="1"
+            app:msbp_measurementUnit="sec"
+            app:msbp_dialogEnabled="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Updates">
+
+        <Preference
+            android:title="Intent Preference">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="http://codepath.com/" />
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

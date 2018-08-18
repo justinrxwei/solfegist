@@ -18,11 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.pavelsikun.seekbarpreference.SeekBarPreference;
+
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private Fragment cameraFragment;
     private Fragment learnFragment;
-    private Fragment profileFragment;
+    private ProfileFragment profileFragment;
 
     private static boolean soundEnabled = false;
 
@@ -31,7 +33,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private ActionBar actionBar;
 
     MediaPlayer doSound, reSound, miSound, faSound, solSound, laSound, tiSound;
-
+    private static int soundDelay;
+    private static Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,22 +78,29 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_home:
                 displayCameraFragment();
                 actionBar.setTitle(sHome);
+                if (!ProfileFragment.getPrefCheckClassify().isChecked()) {
+                    Camera2BasicFragment.getToggleButton().setChecked(false);
+                }
                 break;
 
             case R.id.navigation_learn:
                 displayLearnFragment();
                 actionBar.setTitle(sLearn);
-
-                /*turn off button when cameraFragment is hidden
-                setSoundEnabled(false);
-                Camera2BasicFragment.getToggleButton().setChecked(false);*/
+                //turn off button when cameraFragment is hidden
+                if (!ProfileFragment.getPrefCheckClassify().isChecked()) {
+                    setSoundEnabled(false);
+                    Camera2BasicFragment.getToggleButton().setChecked(false);
+                }
                 break;
 
             case R.id.navigation_practice:
                 displayProfileFragment();
                 actionBar.setTitle(sProfile);
+                if (!ProfileFragment.getPrefCheckClassify().isChecked()) {
+                    setSoundEnabled(false);
+                    Camera2BasicFragment.getToggleButton().setChecked(false);
+                }
                 break;
-
         }
         return true;
     }
@@ -209,12 +219,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         laSound = MediaPlayer.create(this, R.raw.lanote);
         tiSound = MediaPlayer.create(this, R.raw.tinote);
 
-        Handler handler = new Handler();
+        handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
+
                 // update sound here
-                if (soundEnabled)
+                if (soundEnabled) {
+                    soundDelay = ProfileFragment.getSoundDelayValue();
                     switch ((String) Camera2BasicFragment.getToggleButton().getText()) {
                         case "do":
                             doSound.start();
@@ -239,10 +251,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                             break;
 
                     }
-                handler.postDelayed(this, 2000); // set time here to refresh textView
+                }
+                    Log.i("**********","&&&&&&&&&&");
+                    handler.postDelayed(this, soundDelay*900 + 1500); // set time here to refresh textView
             }
         });
-
 
 
     }
