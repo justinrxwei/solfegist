@@ -2,15 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <PreferenceCategory
         android:title="Preferences">
 
         <CheckBoxPreference
             android:key="checkbox_preference"
             android:title="Continuous Solfege Sign Detection"
-            android:summary="If note playing enabled, continue classifying hand signs when browsing other parts of the app"
+            android:summary="If note playing is enabled, continue classifying hand signs when browsing other parts of the app"
             android:defaultValue="false"/>
-
 
         <com.pavelsikun.seekbarpreference.SeekBarPreference
             android:key="seekBarDelay"
@@ -24,10 +24,30 @@
             app:msbp_interval="1"
             app:msbp_measurementUnit="sec"
             app:msbp_dialogEnabled="true"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:layout="@layout/divider"
+        />
+
+    <PreferenceCategory
         android:title="Updates">
+
+        <Preference
+            android:title="Send Feedback"
+            android:summary="Help improve Solfegist with suggestions">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="mailto:solfegistapp@gmail.com">
+                <extra
+                    android:name="android.intent.extra.SUBJECT"
+                    android:value="Solfegist Feedback"/>
+                <extra
+                    android:name="android.intent.extra.TEXT"
+                    android:value=""/>
+            </intent>
+        </Preference>
 
         <Preference
             android:title="Intent Preference">

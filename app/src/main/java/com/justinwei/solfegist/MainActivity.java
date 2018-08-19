@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
 
     @Override
@@ -252,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
                     }
                 }
-                    Log.i("**********","&&&&&&&&&&");
+
                     handler.postDelayed(this, soundDelay*900 + 1500); // set time here to refresh textView
             }
         });

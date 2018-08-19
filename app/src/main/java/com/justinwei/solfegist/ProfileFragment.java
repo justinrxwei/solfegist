@@ -5,7 +5,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
-
 import com.pavelsikun.seekbarpreference.SeekBarPreference;
 
 
@@ -21,7 +20,6 @@ public class ProfileFragment extends PreferenceFragment {
 
         prefSeekBar = (SeekBarPreference) findPreference("seekBarDelay");
 
-
         prefCheckClassify = (CheckBoxPreference) findPreference("checkbox_preference");
         prefCheckClassify.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -31,6 +29,7 @@ public class ProfileFragment extends PreferenceFragment {
                 return true;
             }
         });
+
     }
 
     public static CheckBoxPreference getPrefCheckClassify() {
@@ -41,6 +40,5 @@ public class ProfileFragment extends PreferenceFragment {
     public static int getSoundDelayValue() {
         return prefSeekBar.getCurrentValue();
     }
-
 
 }
