@@ -22,14 +22,16 @@ import com.pavelsikun.seekbarpreference.SeekBarPreference;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
-    private Fragment cameraFragment;
-    private Fragment learnFragment;
+    private Camera2BasicFragment cameraFragment;
+    private LearnFragment learnFragment;
     private ProfileFragment profileFragment;
+    private InfoFragment infoFragment;
+    private static BottomNavigationView navigation;
 
     private static boolean soundEnabled = false;
 
     //variables to update actionBar
-    private SpannableString sHome, sLearn, sProfile;
+    private SpannableString sHome, sLearn, sProfile, sInfo;
     private ActionBar actionBar;
 
     MediaPlayer doSound, reSound, miSound, faSound, solSound, laSound, tiSound;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
         //initialize fragments and display cameraFragment on startup
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 cameraFragment = Camera2BasicFragment.newInstance();
                 learnFragment = new LearnFragment();
                 profileFragment = new ProfileFragment();
+                infoFragment = new InfoFragment();
                 getFragmentManager()
                         .beginTransaction()
                         .add(R.id.fragment_container, learnFragment)
@@ -56,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 getFragmentManager()
                         .beginTransaction()
                         .add(R.id.fragment_container, profileFragment)
+                        .commit();
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.fragment_container, infoFragment)
                         .commit();
                 getFragmentManager()
                         .beginTransaction()
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_home:
                 displayCameraFragment();
                 actionBar.setTitle(sHome);
+                navigation.getMenu().setGroupCheckable(0, true, true);
                 if (!ProfileFragment.getPrefCheckClassify().isChecked()) {
                     Camera2BasicFragment.getToggleButton().setChecked(false);
                 }
@@ -90,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_learn:
                 displayLearnFragment();
                 actionBar.setTitle(sLearn);
+                navigation.getMenu().setGroupCheckable(0, true, true);
                 //turn off button when cameraFragment is hidden
                 if (!ProfileFragment.getPrefCheckClassify().isChecked()) {
                     setSoundEnabled(false);
@@ -100,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_practice:
                 displayProfileFragment();
                 actionBar.setTitle(sProfile);
+                navigation.getMenu().setGroupCheckable(0, true, true);
                 if (!ProfileFragment.getPrefCheckClassify().isChecked()) {
                     setSoundEnabled(false);
                     Camera2BasicFragment.getToggleButton().setChecked(false);
@@ -120,7 +130,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.infoButton)
         {
-            //show info screen
+            displayInfoFragment();
+            navigation.getMenu().setGroupCheckable(0, false, true);
+            actionBar.setTitle(sInfo);
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -129,23 +142,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     //TODO: clean these methods up :(
     private void displayCameraFragment() {
         if (cameraFragment.isAdded()) {
-            getFragmentManager().beginTransaction().show(cameraFragment).commit();;
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).show(cameraFragment).commit();
         } else {
             getFragmentManager().beginTransaction().add(R.id.fragment_container, cameraFragment).commit();
         }
-        if (learnFragment.isAdded()) getFragmentManager().beginTransaction().hide(learnFragment).commit();
-        if (profileFragment.isAdded()) getFragmentManager().beginTransaction().hide(profileFragment).commit();
+        if (learnFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(learnFragment).commit();
+        if (profileFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(profileFragment).commit();
+        if (infoFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(infoFragment).commit();
         //getFragmentManager().beginTransaction().commit();
     }
 
     private void displayLearnFragment() {
         if (learnFragment.isAdded()) {
-            getFragmentManager().beginTransaction().show(learnFragment).commit();
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).show(learnFragment).commit();
         } else {
-            getFragmentManager().beginTransaction().add(R.id.fragment_container, learnFragment).commit();
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
+                    .add(R.id.fragment_container, learnFragment).commit();
         }
-        if (cameraFragment.isAdded()) getFragmentManager().beginTransaction().hide(cameraFragment).commit();
-        if (profileFragment.isAdded()) getFragmentManager().beginTransaction().hide(profileFragment).commit();
+        if (cameraFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(cameraFragment).commit();
+        if (profileFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(profileFragment).commit();
+        if (infoFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(infoFragment).commit();
 
         //listeners for card buttons
         Button doButton = (Button) findViewById(R.id.doCardButton);
@@ -189,13 +214,36 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private void displayProfileFragment() {
         if (profileFragment.isAdded()) {
-            getFragmentManager().beginTransaction().show(profileFragment).commit();
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).show(profileFragment).commit();
         } else {
-            getFragmentManager().beginTransaction().add(R.id.fragment_container, profileFragment).commit();
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
+                    .add(R.id.fragment_container, profileFragment).commit();
         }
-        if (learnFragment.isAdded()) getFragmentManager().beginTransaction().hide(learnFragment).commit();
-        if (cameraFragment.isAdded()) getFragmentManager().beginTransaction().hide(cameraFragment).commit();
+        if (learnFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(learnFragment).commit();
+        if (cameraFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(cameraFragment).commit();
+        if (infoFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(infoFragment).commit();
+    }
 
+    private void displayInfoFragment() {
+        if (infoFragment.isAdded()) {
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).show(infoFragment).commit();
+        } else {
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
+                    .add(R.id.fragment_container, infoFragment).commit();
+        }
+        if (learnFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(learnFragment).commit();
+        if (cameraFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(cameraFragment).commit();
+        if (profileFragment.isAdded()) getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(profileFragment).commit();
     }
 
     private void loadActionBarText() {
@@ -210,6 +258,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         sProfile = new SpannableString("MY PROFILE");
         sProfile.setSpan(new TypefaceSpan(this, "Market_Deco.ttf"), 0, sProfile.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sInfo = new SpannableString("INFO");
+        sInfo.setSpan(new TypefaceSpan(this, "Market_Deco.ttf"), 0, sInfo.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 

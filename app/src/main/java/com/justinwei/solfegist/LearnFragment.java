@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class LearnFragment extends Fragment {
-    Button doCard, reCard, miCard, faCard, solCard, laCard, tiCard;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
