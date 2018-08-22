@@ -17,21 +17,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <com.justinwei.solfegist.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        />
+        android:layout_alignParentTop="true" />
 
     <FrameLayout
         android:id="@+id/control"
         android:layout_width="match_parent"
-        android:layout_height="112dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/whitesquare"/>
 
         <ToggleButton android:id="@+id/text"
             android:layout_width="match_parent"
@@ -40,9 +45,9 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_gravity="center"
             android:textColor="@color/unactivatedbutton"
-            android:textSize="50sp"
+            android:textSize="42sp"
+            android:textAlignment="center"
             android:textOn="@null"
             android:textOff="@null"
             android:background="@color/colorPrimary"

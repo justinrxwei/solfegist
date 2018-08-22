@@ -25,6 +25,15 @@
             app:msbp_measurementUnit="sec"
             app:msbp_dialogEnabled="true"/>
 
+        <ListPreference
+            android:key="sound_preference"
+            android:title="Sound Type"
+            android:summary="Notes are currently played with %s"
+            android:entries="@array/Sound"
+            android:entryValues="@array/SoundData"
+            android:defaultValue="0"
+            />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -47,12 +56,6 @@
                     android:name="android.intent.extra.TEXT"
                     android:value=""/>
             </intent>
-        </Preference>
-
-        <Preference
-            android:title="Intent Preference">
-            <intent android:action="android.intent.action.VIEW"
-                android:data="http://codepath.com/" />
         </Preference>
 
     </PreferenceCategory>

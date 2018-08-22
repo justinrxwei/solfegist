@@ -1,9 +1,12 @@
 package com.justinwei.solfegist;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 
@@ -17,8 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
-import com.pavelsikun.seekbarpreference.SeekBarPreference;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -36,7 +38,42 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     MediaPlayer doSound, reSound, miSound, faSound, solSound, laSound, tiSound;
     private static int soundDelay;
-    private static Handler handler;
+    private Handler handler;
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+
+            // update sound here
+            if (soundEnabled) {
+                soundDelay = ProfileFragment.getSoundDelayValue();
+                switch ((String) Camera2BasicFragment.getToggleButton().getText()) {
+                    case "do":
+                        doSound.start();
+                        break;
+                    case "re":
+                        reSound.start();
+                        break;
+                    case "mi":
+                        miSound.start();
+                        break;
+                    case "fa":
+                        faSound.start();
+                        break;
+                    case "sol":
+                        solSound.start();
+                        break;
+                    case "la":
+                        laSound.start();
+                        break;
+                    case "ti":
+                        tiSound.start();
+                        break;
+
+                }
+            }
+            handler.postDelayed(this, soundDelay*900 + 1500); // set time here to refresh textView
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 learnFragment = new LearnFragment();
                 profileFragment = new ProfileFragment();
                 infoFragment = new InfoFragment();
+
                 getFragmentManager()
                         .beginTransaction()
                         .add(R.id.fragment_container, learnFragment)
@@ -62,17 +100,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         .commit();
                 getFragmentManager()
                         .beginTransaction()
-                        .add(R.id.fragment_container, infoFragment)
-                        .commit();
-                getFragmentManager()
-                        .beginTransaction()
                         .add(R.id.fragment_container, cameraFragment)
                         .commit();
             }
 
         loadActionBarText();
         loadAudio();
-
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -145,7 +179,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             getFragmentManager().beginTransaction()
                     .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).show(cameraFragment).commit();
         } else {
-            getFragmentManager().beginTransaction().add(R.id.fragment_container, cameraFragment).commit();
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
+                    .add(R.id.fragment_container, cameraFragment).commit();
         }
         if (learnFragment.isAdded()) getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(learnFragment).commit();
@@ -244,8 +280,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(cameraFragment).commit();
         if (profileFragment.isAdded()) getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.fade_in, R.animator.fade_out).hide(profileFragment).commit();
-    }
 
+    }
     private void loadActionBarText() {
         //update action bar font
         sHome = new SpannableString("SOLFEGIST");
@@ -264,58 +300,70 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private void loadAudio() {
+    public void loadAudio() {
         //handle sound
-        doSound = MediaPlayer.create(this, R.raw.donote);
-        reSound = MediaPlayer.create(this, R.raw.renote);
-        miSound = MediaPlayer.create(this, R.raw.minote);
-        faSound = MediaPlayer.create(this, R.raw.fanote);
-        solSound = MediaPlayer.create(this, R.raw.solnote);
-        laSound = MediaPlayer.create(this, R.raw.lanote);
-        tiSound = MediaPlayer.create(this, R.raw.tinote);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sp.getString("sound_preference","-1").contains("0")) {
+            doSound = MediaPlayer.create(this, R.raw.donote);
+            reSound = MediaPlayer.create(this, R.raw.renote);
+            miSound = MediaPlayer.create(this, R.raw.minote);
+            faSound = MediaPlayer.create(this, R.raw.fanote);
+            solSound = MediaPlayer.create(this, R.raw.solnote);
+            laSound = MediaPlayer.create(this, R.raw.lanote);
+            tiSound = MediaPlayer.create(this, R.raw.tinote);
+        } else {
+            doSound = MediaPlayer.create(this, R.raw.altdo);
+            reSound = MediaPlayer.create(this, R.raw.altre);
+            miSound = MediaPlayer.create(this, R.raw.altmi);
+            faSound = MediaPlayer.create(this, R.raw.altfa);
+            solSound = MediaPlayer.create(this, R.raw.altsol);
+            laSound = MediaPlayer.create(this, R.raw.altla);
+            tiSound = MediaPlayer.create(this, R.raw.altti);
+        }
 
+
+    }
+
+    public void loadAudio(String type) {
+        //handle sound
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (type.contains("0")) {
+            doSound = MediaPlayer.create(this, R.raw.donote);
+            reSound = MediaPlayer.create(this, R.raw.renote);
+            miSound = MediaPlayer.create(this, R.raw.minote);
+            faSound = MediaPlayer.create(this, R.raw.fanote);
+            solSound = MediaPlayer.create(this, R.raw.solnote);
+            laSound = MediaPlayer.create(this, R.raw.lanote);
+            tiSound = MediaPlayer.create(this, R.raw.tinote);
+        } else {
+            doSound = MediaPlayer.create(this, R.raw.altdo);
+            reSound = MediaPlayer.create(this, R.raw.altre);
+            miSound = MediaPlayer.create(this, R.raw.altmi);
+            faSound = MediaPlayer.create(this, R.raw.altfa);
+            solSound = MediaPlayer.create(this, R.raw.altsol);
+            laSound = MediaPlayer.create(this, R.raw.altla);
+            tiSound = MediaPlayer.create(this, R.raw.altti);
+        }
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
+        handler.post(runnable);
+    }
 
-                // update sound here
-                if (soundEnabled) {
-                    soundDelay = ProfileFragment.getSoundDelayValue();
-                    switch ((String) Camera2BasicFragment.getToggleButton().getText()) {
-                        case "do":
-                            doSound.start();
-                            break;
-                        case "re":
-                            reSound.start();
-                            break;
-                        case "mi":
-                            miSound.start();
-                            break;
-                        case "fa":
-                            faSound.start();
-                            break;
-                        case "sol":
-                            solSound.start();
-                            break;
-                        case "la":
-                            laSound.start();
-                            break;
-                        case "ti":
-                            tiSound.start();
-                            break;
-
-                    }
-                }
-
-                    handler.postDelayed(this, soundDelay*900 + 1500); // set time here to refresh textView
-            }
-        });
-
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
     }
 
     public static void setSoundEnabled(boolean soundEnabled) {
         MainActivity.soundEnabled = soundEnabled;
     }
+
+
 }
