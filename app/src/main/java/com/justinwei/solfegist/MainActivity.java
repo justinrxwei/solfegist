@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private static boolean soundEnabled = false;
 
     //variables to update actionBar
-    private SpannableString sHome, sLearn, sProfile, sInfo;
+    private SpannableString sHome, sLearn, sProfile, sInfo, sIntroduce;
     private ActionBar actionBar;
 
     MediaPlayer doSound, reSound, miSound, faSound, solSound, laSound, tiSound;
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
+
         //initialize fragments and display cameraFragment on startup
         if (findViewById(R.id.container) != null)
             if (null == savedInstanceState) {
@@ -105,6 +106,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             }
 
         loadActionBarText();
+
+        SharedPreferences sp = getSharedPreferences("firstLog", 0);
+        if (!sp.getString("firstTime", "").toString().equals("no"))
+        {
+            //only runs if first time opening
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("firstTime", "no");
+            editor.commit();
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_container, infoFragment)
+                    .commit();
+            actionBar.setTitle(sIntroduce);
+            navigation.getMenu().setGroupCheckable(0, false, true);
+        }
+
         loadAudio();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
@@ -298,6 +315,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         sInfo = new SpannableString("INFO");
         sInfo.setSpan(new TypefaceSpan(this, "Market_Deco.ttf"), 0, sInfo.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sIntroduce = new SpannableString("INTRO TO SOLFEGIST");
+        sIntroduce.setSpan(new TypefaceSpan(this, "Market_Deco.ttf"), 0, sIntroduce.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     public void loadAudio() {
@@ -326,7 +346,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     public void loadAudio(String type) {
         //handle sound
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (type.contains("0")) {
             doSound = MediaPlayer.create(this, R.raw.donote);
             reSound = MediaPlayer.create(this, R.raw.renote);

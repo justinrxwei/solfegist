@@ -3,11 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/whitesquare"
+        android:scaleType="centerCrop"/>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fadeScrollbars="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,7 +110,18 @@
                 android:layout_marginBottom="10dp"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                android:text="Solfegist uses a fine-tuned image classifier to recognize hand signs."/>
+                android:text="Solfegist uses a retrained image classifier to recognize hand signs."/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="Currently, the classifier works best with plain backgrounds, like a plain shirt or solid wall. However, work is being done to make it more accurate in more varied environments; this will be released in a future update."/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -144,7 +161,7 @@
                 android:layout_marginBottom="4dp"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                android:text="For optimal performance, make sure the hand is in full view and close to the front camera."/>
+                android:text="For optimal performance, make sure the hand is in full view and directly facing the front camera."/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -247,6 +264,18 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:text="To return to this info page, press the 'i' button at the top right of the screen."/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
                 android:textSize="14sp"
                 android:text="Enjoy using Solfegist!"/>
 
