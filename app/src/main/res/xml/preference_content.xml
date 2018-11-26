@@ -41,7 +41,12 @@
         />
 
     <PreferenceCategory
-        android:title="Updates">
+        android:title="Other">
+        <Preference
+            android:title="Privacy Policy">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://www.dropbox.com/s/2ng1warb398gnxb/Solfegist_Privacy_Policy.docx?dl=0" />
+        </Preference>
 
         <Preference
             android:title="Send Feedback"
@@ -59,5 +64,7 @@
         </Preference>
 
     </PreferenceCategory>
+
+
 
 </PreferenceScreen>
